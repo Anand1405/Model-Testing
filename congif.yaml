@@ -1,0 +1,235 @@
+# Model Testing Agent Configuration
+
+# AWS Configuration
+aws:
+  region: us-west-2
+  bedrock:
+    orchestrator_model_id: us.anthropic.claude-sonnet-4-20250514-v1:0
+    timeout: 600
+    max_retries: 3
+    retry_delay: 2
+
+# Agent Configuration
+agents:
+  orchestrator:
+    max_iterations: 30
+    temperature: 0.7
+    top_p: 0.9
+    max_tokens: 4096
+    enable_thinking: true
+    enable_streaming: true
+  
+  researcher:
+    max_iterations: 15
+    temperature: 0.5
+    focus: documentation_accuracy
+  
+  test_planner:
+    max_iterations: 20
+    temperature: 0.6
+    coverage_level: comprehensive
+  
+  executor:
+    max_iterations: 25
+    temperature: 0.7
+    parallel_execution: false
+  
+  analyzer:
+    max_iterations: 15
+    temperature: 0.5
+    depth: detailed
+  
+  reporter:
+    max_iterations: 10
+    temperature: 0.6
+    formats:
+      - json
+      - markdown
+
+# Test Configuration
+testing:
+  assets_directory: test_assets
+  reports_directory: test_reports
+  
+  # Asset sources for different modalities
+  asset_sources:
+    image:
+      - name: landscape
+        url: https://picsum.photos/1920/1080
+      - name: portrait
+        url: https://picsum.photos/800/1200
+      - name: complex_scene
+        url: https://picsum.photos/1600/900
+    
+    video:
+      - name: short_clip
+        url: https://sample-videos.com/video321/mp4/240/big_buck_bunny_240p_1mb.mp4
+      - name: medium_clip
+        url: https://sample-videos.com/video321/mp4/480/big_buck_bunny_480p_2mb.mp4
+    
+    audio:
+      - name: speech_sample
+        url: https://www2.cs.uic.edu/~i101/SoundFiles/PinkPanther30.wav
+      - name: music_sample
+        url: https://www2.cs.uic.edu/~i101/SoundFiles/StarWars3.wav
+    
+    document:
+      - name: simple_pdf
+        url: https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf
+      - name: multi_page
+        url: https://www.africau.edu/images/default/sample.pdf
+  
+  # Test case configuration
+  test_cases:
+    text:
+      - name: basic_generation
+        description: Basic text generation capability
+        priority: high
+      - name: reasoning
+        description: Multi-step reasoning and logic
+        priority: high
+      - name: long_context
+        description: Extended context handling
+        priority: medium
+      - name: code_generation
+        description: Code generation and explanation
+        priority: medium
+      - name: creative_writing
+        description: Creative content generation
+        priority: low
+    
+    image:
+      - name: basic_understanding
+        description: Image description and analysis
+        priority: high
+      - name: object_detection
+        description: Object identification
+        priority: high
+      - name: scene_understanding
+        description: Complex scene analysis
+        priority: medium
+      - name: text_in_image
+        description: OCR and text extraction
+        priority: medium
+    
+    video:
+      - name: basic_analysis
+        description: Video content understanding
+        priority: high
+      - name: temporal_understanding
+        description: Event sequence comprehension
+        priority: high
+      - name: action_recognition
+        description: Action and activity detection
+        priority: medium
+    
+    audio:
+      - name: transcription
+        description: Audio to text conversion
+        priority: high
+      - name: speech_understanding
+        description: Content comprehension
+        priority: high
+      - name: audio_classification
+        description: Sound type identification
+        priority: medium
+    
+    document:
+      - name: text_extraction
+        description: Document text parsing
+        priority: high
+      - name: structure_analysis
+        description: Document layout understanding
+        priority: high
+      - name: table_extraction
+        description: Table data extraction
+        priority: medium
+
+# Logging Configuration
+logging:
+  level: INFO
+  format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+  file: logs/model_testing.log
+  console: true
+  
+  # Structured logging
+  structured: true
+  include_trace_id: true
+
+# Performance Configuration
+performance:
+  max_concurrent_tests: 5
+  test_timeout_seconds: 300
+  asset_download_timeout: 60
+  enable_caching: true
+  cache_directory: .cache
+
+# Reporting Configuration
+reporting:
+  include_raw_responses: true
+  include_performance_metrics: true
+  include_error_traces: true
+  generate_visualizations: false
+  
+  markdown:
+    include_toc: true
+    include_timestamps: true
+    include_metadata: true
+  
+  json:
+    pretty_print: true
+    include_schema_version: true
+
+# Model-Specific Configurations
+model_configs:
+  amazon_nova_2_omni:
+    model_id: us.amazon.nova-omni-v1:0
+    region: us-west-2
+    input_modalities:
+      - text
+      - image
+      - video
+      - audio
+      - document
+    output_modalities:
+      - text
+      - image
+    max_tokens: 5000
+    supports_streaming: true
+    supports_tool_use: true
+    supports_extended_thinking: true
+  
+  claude_sonnet_4:
+    model_id: us.anthropic.claude-sonnet-4-20250514-v1:0
+    region: us-west-2
+    input_modalities:
+      - text
+      - image
+      - document
+    output_modalities:
+      - text
+    max_tokens: 8192
+    supports_streaming: true
+    supports_tool_use: true
+    supports_extended_thinking: true
+  
+  # Add more model configurations as needed
+
+# Security Configuration
+security:
+  validate_inputs: true
+  sanitize_outputs: true
+  bypass_tool_consent: true  # For automated workflows
+  
+  aws:
+    use_iam_roles: true
+    encrypt_at_rest: true
+
+# Feature Flags
+features:
+  enable_parallel_testing: false
+  enable_advanced_analytics: true
+  enable_cost_tracking: true
+  enable_performance_profiling: true
+  enable_auto_retry: true
+  enable_incremental_reporting: true
